@@ -1,6 +1,10 @@
-# Linguistic Decolonization
+# Sawubona
 
-**Conditioned political bias of edge LLMs across South Africa's languages.**
+> **Sawubona** — "I see you" (isiZulu). The question this repo asks: does a small edge
+> model genuinely *see* each language's speakers and their real politics, or collapse them
+> into an English-anchored default?
+
+**Linguistic Decolonization: conditioned political bias of edge LLMs across South Africa's languages.**
 
 Ask a small language model about South African politics in English and in isiZulu, and it
 may answer differently. Prompted in English, frontier models tend libertarian-left; in
