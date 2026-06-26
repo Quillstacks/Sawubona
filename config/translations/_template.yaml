@@ -1,0 +1,19 @@
+# Per-language prompt translations. One file per language: config/translations/<code>.yaml
+# Populate from the Afrobarometer R9 *translated questionnaire* (data/README.md), so the
+# model is prompted with the exact professionally-translated wording the human respondents
+# heard. Keys are item ids from config/items_political.yaml.
+#
+#   lang: zul                      # ISO code, must match config/languages.yaml
+#   items:
+#     dem_preferable:
+#       text: "<translated question text>"
+#       paraphrases:               # optional; >=3 total (incl. text) recommended for the
+#         - "<paraphrase 1>"       #   Röttger paraphrase-invariance check
+#         - "<paraphrase 2>"
+#     reject_one_party:
+#       text: "..."
+#
+# Anything missing falls back to the canonical English text in items_political.yaml and is
+# logged as a warning, so smoke runs still work before translations are filled in.
+lang: xx
+items: {}

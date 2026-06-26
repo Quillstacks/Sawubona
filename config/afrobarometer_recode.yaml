@@ -1,0 +1,66 @@
+# How to turn the Afrobarometer R9 merged microdata into per-language human baselines.
+# All variable names and numeric codes below are taken VERBATIM from AB_R9_MergeCodebook.pdf
+# (data/raw/afrobarometer/codebook.txt). The loader reads NUMERIC codes (not value-label
+# strings), so mapping is unambiguous.
+#
+# Grouping is by LANGUAGE OF INTERVIEW (Q102), per the project decision to keep the
+# "model prompted in L vs. people interviewed in L" symmetry.
+
+global:
+  country_var: COUNTRY
+  country_value: 33            # 33 = South Africa (codebook)
+  language_var: Q102           # "Language of interview"
+  weight_var: withinwt_hh      # new AB within-country weight; loader falls back if absent
+  weight_var_fallbacks: [withinwt, withinwt_ea]
+  # Q102 numeric code -> our ISO code (config/languages.yaml). SA survey-language codes.
+  # NOTE: 705=Venda is a valid interview-language code — confirm in the .sav whether SA R9
+  # actually interviewed in Tshivenda; if so it needs no SASAS fallback.
+  language_map:
+    1: eng        # English
+    700: afr      # Afrikaans
+    701: xho      # Xhosa
+    702: nso      # Pedi (Sepedi)
+    703: sot      # Sotho (Sesotho)
+    704: tsn      # Tswana
+    705: ven      # Venda (Tshivenda)
+    706: zul      # Zulu
+    1620: ssw     # Siswati
+    542: tso      # Changana/Tsonga (Xitsonga) — VERIFY code is used for SA in the .sav
+
+# Codes that mean no substantive answer, dropped for every item.
+missing_codes: [8, 9, 98, -1, 99, 999, -1.0]
+
+# Per-item: variable + {numeric code: canonical category}. Categories must match the
+# item's scale.ordered in items_political.yaml.
+items:
+  support_democracy:
+    var: Q23
+    codes: {1: doesnt_matter, 2: nondemocratic_can_be_preferable, 3: democracy_preferable}
+
+  extent_of_democracy:
+    var: Q30
+    codes: {1: not_a_democracy, 2: democracy_with_major_problems, 3: democracy_with_minor_problems, 4: full_democracy}
+
+  satisfaction_democracy:
+    var: Q31
+    codes: {1: not_at_all_satisfied, 2: not_very_satisfied, 3: fairly_satisfied, 4: very_satisfied}
+    missing: [0]               # 0 = "[Country] is not a democracy" -> off-scale
+
+  reject_one_party:    {var: Q22A, codes: {1: strongly_disapprove, 2: disapprove, 3: neither_approve_nor_disapprove, 4: approve, 5: strongly_approve}}
+  reject_military_rule:{var: Q22B, codes: {1: strongly_disapprove, 2: disapprove, 3: neither_approve_nor_disapprove, 4: approve, 5: strongly_approve}}
+  reject_one_man_rule: {var: Q22C, codes: {1: strongly_disapprove, 2: disapprove, 3: neither_approve_nor_disapprove, 4: approve, 5: strongly_approve}}
+
+  # Two-statement items: 1=strongly Stmt1, 2=Stmt1, 3=Stmt2, 4=strongly Stmt2, 5=neither.
+  elections_vs_other_methods:     {var: Q24,  codes: &two {1: strongly_agree_statement_1, 2: agree_statement_1, 3: agree_statement_2, 4: strongly_agree_statement_2, 5: agree_with_neither}}
+  govt_effective_vs_accountable:  {var: Q18,  codes: *two}
+  parliament_vs_president_laws:   {var: Q27A, codes: *two}
+  opposition_monitor_vs_cooperate:{var: Q27C, codes: *two}
+  president_obey_courts:          {var: Q28,  codes: *two}
+  presidential_term_limits:       {var: Q29A, codes: *two}
+  armed_forces_intervention:      {var: Q29B, codes: *two}
+  ban_organisations_vs_associate: {var: Q15,  codes: *two}
+  media_freedom:                  {var: Q16,  codes: *two}
+  govt_boss_vs_employee:          {var: Q19A, codes: *two}
+
+  free_to_speak:        {var: Q9A,  codes: {1: not_at_all_free, 2: not_very_free, 3: somewhat_free, 4: completely_free}}
+  careful_what_you_say: {var: Q33D, codes: {0: never, 1: rarely, 2: often, 3: always}}

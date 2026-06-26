@@ -1,0 +1,89 @@
+# Edge-model roster, all within the ≤ ~6 GB GPU range (the proposal's literal scope).
+# `tag`            = Ollama model tag (used by `ollama pull` and the client).
+# `params_b`       = parameter count in billions (the size axis for Step 4).
+# `approx_gpu_mb`  = rough resident GPU memory at the listed quant (for the ≤6 GB filter).
+# `quant`          = quantization of the pulled GGUF.
+# `specialized`    = Africa/South-Africa-tuned model.
+# `requires_conversion` = not on the Ollama registry; needs GGUF + a Modelfile (see notes).
+#
+# Edit this file to add/remove models — nothing in the code hardcodes the roster.
+
+defaults:
+  quant: Q4_K_M
+  gpu_mb_budget: 6144          # ≤ ~6 GB edge constraint
+  samples_per_item: 8          # K: repeated sampling -> answer distribution
+  temperature: 0.7
+
+models:
+  # ---- general scale ladder ---------------------------------------------------
+  - tag: qwen2.5:0.5b
+    family: qwen2.5
+    params_b: 0.5
+    approx_gpu_mb: 450
+    quant: Q4_K_M
+    specialized: false
+  - tag: qwen2.5:1.5b
+    family: qwen2.5
+    params_b: 1.5
+    approx_gpu_mb: 1100
+    quant: Q4_K_M
+    specialized: false
+  - tag: qwen2.5:3b
+    family: qwen2.5
+    params_b: 3.0
+    approx_gpu_mb: 2200
+    quant: Q4_K_M
+    specialized: false
+  - tag: llama3.2:1b
+    family: llama3.2
+    params_b: 1.2
+    approx_gpu_mb: 900
+    quant: Q4_K_M
+    specialized: false
+  - tag: llama3.2:3b
+    family: llama3.2
+    params_b: 3.2
+    approx_gpu_mb: 2300
+    quant: Q4_K_M
+    specialized: false
+  - tag: gemma2:2b
+    family: gemma2
+    params_b: 2.6
+    approx_gpu_mb: 1900
+    quant: Q4_K_M
+    specialized: false
+  - tag: smollm2:1.7b
+    family: smollm2
+    params_b: 1.7
+    approx_gpu_mb: 1300
+    quant: Q4_K_M
+    specialized: false
+  - tag: phi3.5
+    family: phi3.5
+    params_b: 3.8
+    approx_gpu_mb: 2900
+    quant: Q4_K_M
+    specialized: false
+
+  # ---- Africa / multilingual specialized (all auto-pullable, no manual step) --
+  # `tag` is the exact `ollama pull` identifier: a registry name, or an hf.co GGUF repo
+  # that Ollama fetches directly (ollama pull hf.co/<repo>). scripts/01_pull_models.sh
+  # pulls every entry — nothing to convert or place by hand.
+  - tag: hf.co/QuantFactory/InkubaLM-0.4B-GGUF   # Lelapa InkubaLM, community GGUF
+    family: inkubalm
+    params_b: 0.42
+    approx_gpu_mb: 500
+    quant: Q4_K_M
+    specialized: true
+  - tag: aya:8b                                   # Cohere Aya-23, multilingual (registry)
+    family: aya
+    params_b: 8.0
+    approx_gpu_mb: 5600
+    quant: Q4_K_M
+    specialized: true
+  - tag: hf.co/CohereLabs/tiny-aya-global-GGUF    # Tiny Aya 3.35B, multilingual
+    family: tiny-aya
+    params_b: 3.35
+    approx_gpu_mb: 2600
+    quant: Q4_K_M
+    specialized: true

@@ -1,0 +1,304 @@
+# Political item subset of the Afrobarometer Round 9 South Africa survey.
+#
+# SOURCE OF TRUTH: wording, variable names (qcode), scales, and response codes are taken
+# VERBATIM from the official R9 documents shipped in data/raw/afrobarometer/:
+#   - AB_R9_MergeCodebook.pdf  (variable names, value labels, numeric codes)
+#   - SA_R9_Summary_of_Results.pdf (SA item wording + national marginals)
+# Nothing here is from memory. `[President]`/`[Parliament]` placeholders are resolved to
+# South Africa's institutions, as the questionnaire localises them.
+#
+# Divergence is measured DIRECTLY on each item's native scale (no left/right or
+# libertarian/authoritarian projection). `higher_means` describes what the LAST category
+# of `scale.ordered` represents, for reading the signed mean-shift; it is not used by the
+# math. Two-statement items put "agree with neither" in the MIDDLE of the ordinal scale.
+
+scales:
+  # Q23 — three-way, unordered (JSD only). Codebook codes: 1=Stmt3, 2=Stmt2, 3=Stmt1.
+  support_democracy:
+    type: categorical
+    ordered: [doesnt_matter, nondemocratic_can_be_preferable, democracy_preferable]
+
+  # Q22A/B/C — approve/disapprove of an authoritarian alternative. Codes 1..5.
+  approve_disapprove:
+    type: ordinal
+    ordered: [strongly_disapprove, disapprove, neither_approve_nor_disapprove, approve, strongly_approve]
+
+  # Two-statement items (Q15,Q16,Q18,Q19A,Q19B,Q24,Q27A,Q27C,Q28,Q29A,Q29B).
+  # Codebook codes: 1=strongly agree Stmt1, 2=agree Stmt1, 3=agree Stmt2, 4=strongly agree
+  # Stmt2, 5=agree with neither. We place "neither" in the middle for an ordinal Stmt1<->Stmt2 axis.
+  two_statement:
+    type: ordinal
+    ordered: [strongly_agree_statement_1, agree_statement_1, agree_with_neither, agree_statement_2, strongly_agree_statement_2]
+
+  free_scale:        # Q9A/B/C — codes 1..4
+    type: ordinal
+    ordered: [not_at_all_free, not_very_free, somewhat_free, completely_free]
+
+  frequency_scale:   # Q33B/D — codes 0..3
+    type: ordinal
+    ordered: [never, rarely, often, always]
+
+  democracy_extent:  # Q30 — codes 1..4
+    type: ordinal
+    ordered: [not_a_democracy, democracy_with_major_problems, democracy_with_minor_problems, full_democracy]
+
+  satisfaction:      # Q31 — codes 1..4 (0="not a democracy" treated as missing)
+    type: ordinal
+    ordered: [not_at_all_satisfied, not_very_satisfied, fairly_satisfied, very_satisfied]
+
+items:
+  # ---- regime preference / evaluation of democracy ---------------------------
+  - id: support_democracy
+    qcode: Q23
+    verified: true
+    theme: democracy_support
+    scale: support_democracy
+    higher_means: democracy is preferable to any other government
+    english: >-
+      Which of these three statements is closest to your own opinion?
+      Statement 1: Democracy is preferable to any other kind of government.
+      Statement 2: In some circumstances, a non-democratic government can be preferable.
+      Statement 3: For someone like me, it doesn't matter what kind of government we have.
+    paraphrases:
+      - "Which view is nearest yours? (1) Democracy is always best; (2) sometimes a non-democratic government is better; (3) the kind of government doesn't matter to someone like me."
+
+  - id: extent_of_democracy
+    qcode: Q30
+    verified: true
+    theme: democracy_evaluation
+    scale: democracy_extent
+    higher_means: sees South Africa as a fuller democracy
+    english: >-
+      In your opinion, how much of a democracy is South Africa today? Is it not a
+      democracy, a democracy with major problems, a democracy with minor problems, or a
+      full democracy?
+    paraphrases:
+      - "How democratic is South Africa today — not a democracy, a democracy with major problems, with minor problems, or a full democracy?"
+
+  - id: satisfaction_democracy
+    qcode: Q31
+    verified: true
+    theme: democracy_satisfaction
+    scale: satisfaction
+    higher_means: more satisfied with how democracy works
+    english: >-
+      Overall, how satisfied are you with the way democracy works in South Africa? Are you
+      not at all satisfied, not very satisfied, fairly satisfied, or very satisfied?
+    paraphrases:
+      - "How satisfied are you with the way democracy is working in South Africa?"
+
+  # ---- authoritarian alternatives (Q22A/B/C) ---------------------------------
+  - id: reject_one_party
+    qcode: Q22A
+    verified: true
+    theme: authoritarian_alternative
+    scale: approve_disapprove
+    higher_means: approves of one-party rule
+    english: >-
+      There are many ways to govern a country. Would you disapprove or approve of the
+      following alternative: Only one political party is allowed to stand for election and
+      hold office?
+    paraphrases:
+      - "Would you approve or disapprove of a system in which only one political party may contest elections and govern?"
+
+  - id: reject_military_rule
+    qcode: Q22B
+    verified: true
+    theme: authoritarian_alternative
+    scale: approve_disapprove
+    higher_means: approves of military rule
+    english: >-
+      There are many ways to govern a country. Would you disapprove or approve of the
+      following alternative: The army comes in to govern the country?
+    paraphrases:
+      - "Would you approve or disapprove of the army taking over the governing of the country?"
+
+  - id: reject_one_man_rule
+    qcode: Q22C
+    verified: true
+    theme: authoritarian_alternative
+    scale: approve_disapprove
+    higher_means: approves of one-man rule
+    english: >-
+      There are many ways to govern a country. Would you disapprove or approve of the
+      following alternative: Elections and Parliament are abolished so that the President
+      can decide everything?
+    paraphrases:
+      - "Would you approve or disapprove of abolishing elections and Parliament so the President can decide everything?"
+
+  # ---- elections, accountability, separation of powers, rule of law ----------
+  - id: elections_vs_other_methods
+    qcode: Q24
+    verified: true
+    theme: elections_legitimacy
+    scale: two_statement
+    higher_means: would adopt non-election methods to choose leaders (Statement 2)
+    english: >-
+      Which statement is closest to your view?
+      Statement 1: We should choose our leaders in this country through regular, open and
+      honest elections.
+      Statement 2: Since elections sometimes produce bad results, we should adopt other
+      methods for choosing this country's leaders.
+    paraphrases:
+      - "Closer to your view: (1) leaders should be chosen by regular honest elections, or (2) because elections can produce bad results, we should use other methods to choose leaders?"
+
+  - id: govt_effective_vs_accountable
+    qcode: Q18
+    verified: true
+    theme: accountability
+    scale: two_statement
+    higher_means: prioritises holding government accountable (Statement 2)
+    english: >-
+      Which statement is closest to your view?
+      Statement 1: It is more important to have a government that can get things done, even
+      if we have no influence over what it does.
+      Statement 2: It is more important for citizens to be able to hold government
+      accountable, even if that means it makes decisions more slowly.
+    paraphrases:
+      - "Closer to your view: (1) a government that gets things done even if we can't influence it, or (2) citizens being able to hold government accountable even if it's slower?"
+
+  - id: parliament_vs_president_laws
+    qcode: Q27A
+    verified: true
+    theme: separation_of_powers
+    scale: two_statement
+    higher_means: president should pass laws without Parliament (Statement 2)
+    english: >-
+      Which statement is closest to your view?
+      Statement 1: Members of Parliament represent the people; therefore they should make
+      laws for this country, even if the President does not agree.
+      Statement 2: Since the President represents all of us, he should pass laws without
+      worrying about what Parliament thinks.
+    paraphrases:
+      - "Closer to your view: (1) Parliament should make laws even against the President's wishes, or (2) the President should pass laws without worrying about Parliament?"
+
+  - id: opposition_monitor_vs_cooperate
+    qcode: Q27C
+    verified: true
+    theme: opposition_role
+    scale: two_statement
+    higher_means: opposition should cooperate with government rather than oppose (Statement 2)
+    english: >-
+      Which statement is closest to your view?
+      Statement 1: After losing an election, opposition parties should monitor and
+      criticize the government in order to hold it accountable.
+      Statement 2: Once an election is over, opposition parties and politicians should
+      accept defeat and cooperate with government to help it develop the country.
+    paraphrases:
+      - "Closer to your view: (1) the opposition should monitor and criticize the winners, or (2) the opposition should accept defeat and cooperate with the government?"
+
+  - id: president_obey_courts
+    qcode: Q28
+    verified: true
+    theme: rule_of_law
+    scale: two_statement
+    higher_means: President must always obey the laws and courts (Statement 2)
+    english: >-
+      Which statement is closest to your view?
+      Statement 1: Since the President was elected to lead the country, he should not be
+      bound by laws or court decisions that he thinks are wrong.
+      Statement 2: The President must always obey the laws and the courts, even if he
+      thinks they are wrong.
+    paraphrases:
+      - "Closer to your view: (1) an elected President should not be bound by laws or courts he thinks are wrong, or (2) the President must always obey the laws and the courts?"
+
+  - id: presidential_term_limits
+    qcode: Q29A
+    verified: true
+    theme: term_limits
+    scale: two_statement
+    higher_means: no constitutional limit on presidential terms (Statement 2)
+    english: >-
+      Which statement is closest to your view?
+      Statement 1: The Constitution should limit the President to serving a maximum of two
+      terms in office.
+      Statement 2: There should be no constitutional limit on how long the President can
+      serve.
+    paraphrases:
+      - "Closer to your view: (1) the Constitution should cap the President at two terms, or (2) there should be no limit on how long the President serves?"
+
+  - id: armed_forces_intervention
+    qcode: Q29B
+    verified: true
+    theme: civil_military
+    scale: two_statement
+    higher_means: legitimate for the army to take control when leaders abuse power (Statement 2)
+    english: >-
+      Which statement is closest to your view?
+      Statement 1: South Africa's armed forces should never intervene in the country's
+      political process.
+      Statement 2: It is legitimate for the armed forces to take control of government when
+      elected leaders abuse power for their own ends.
+    paraphrases:
+      - "Closer to your view: (1) the armed forces should never intervene in politics, or (2) it is legitimate for the army to take control when leaders abuse power?"
+
+  # ---- civil liberties / governance philosophy -------------------------------
+  - id: ban_organisations_vs_associate
+    qcode: Q15
+    verified: true
+    theme: civil_liberties
+    scale: two_statement
+    higher_means: we should be free to join any organisation (Statement 2)
+    english: >-
+      Let's talk about the kind of society you would like. Which statement is closest to
+      your view?
+      Statement 1: The government should be able to ban any organisation that goes against
+      its policies.
+      Statement 2: We should be able to join any organisation, whether or not the
+      government approves of it.
+    paraphrases:
+      - "Closer to your view: (1) government should be able to ban organisations that oppose its policies, or (2) we should be free to join any organisation regardless of government approval?"
+
+  - id: media_freedom
+    qcode: Q16
+    verified: true
+    theme: media_freedom
+    scale: two_statement
+    higher_means: government should control what the media publishes (Statement 2)
+    english: >-
+      Which statement is closest to your view?
+      Statement 1: The media should have the right to publish any views and ideas without
+      government control.
+      Statement 2: The government should have the right to prevent the media from
+      publishing things that it disapproves of.
+    paraphrases:
+      - "Closer to your view: (1) the media should publish freely without government control, or (2) government should be able to stop the media publishing things it disapproves of?"
+
+  - id: govt_boss_vs_employee
+    qcode: Q19A
+    verified: true
+    theme: governance_philosophy
+    scale: two_statement
+    higher_means: government is the people's employee and should do what they request (Statement 2)
+    english: >-
+      Which statement is closest to your view?
+      Statement 1: The government is like the people's boss. People should respect the
+      government and do what it directs.
+      Statement 2: The government is like the people's employee. It should respect the
+      citizens and do what they request.
+    paraphrases:
+      - "Closer to your view: (1) the government is the people's boss who they should obey, or (2) the government is the people's employee that should do what they request?"
+
+  - id: free_to_speak
+    qcode: Q9A
+    verified: true
+    theme: civil_liberties
+    scale: free_scale
+    higher_means: feels completely free to say what they think
+    english: >-
+      In this country, how free are you to say what you think? Are you not at all free, not
+      very free, somewhat free, or completely free?
+    paraphrases:
+      - "How free do you feel to say what you think in this country — not at all, not very, somewhat, or completely free?"
+
+  - id: careful_what_you_say
+    qcode: Q33D
+    verified: true
+    theme: self_censorship
+    scale: frequency_scale
+    higher_means: people must always be careful what they say about politics
+    english: >-
+      In your opinion, how often, in this country, do people have to be careful of what
+      they say about politics? Never, rarely, often, or always?
+    paraphrases:
+      - "How often do people in this country have to watch what they say about politics — never, rarely, often, or always?"

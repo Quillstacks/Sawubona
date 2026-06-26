@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "decol"
+version = "0.1.0"
+description = "Linguistic Decolonization: conditioned political bias of edge LLMs across South Africa's languages"
+authors = [
+    { name = "Mark Schutera" },
+    { name = "Thomas Dobbelstein" },
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.10",
+    "pyyaml>=6.0",
+    "statsmodels>=0.14",
+    "matplotlib>=3.7",
+    "tqdm>=4.65",
+    "pyreadstat>=1.2",   # read Afrobarometer / SASAS .sav microdata
+    "ollama>=0.3",       # local edge-model inference (GGUF)
+]
+
+[project.optional-dependencies]
+# Heavier extras only needed on the run machine.
+capability = ["lm-eval>=0.4", "datasets>=2.18"]   # AfroBench via lm-evaluation-harness
+maps = ["geopandas>=0.14"]                          # optional per-language choropleth
+dev = ["pytest>=7.4"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

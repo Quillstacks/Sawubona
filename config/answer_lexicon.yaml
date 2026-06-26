@@ -1,0 +1,49 @@
+# Fallback lexicon for parsing FREE-TEXT model answers (open-ended cross-check and cases
+# where structured-output enum is unavailable). The PRIMARY path forces the model to emit
+# a canonical scale label via Ollama structured output, so this lexicon is a safety net.
+#
+# Maps surface words -> canonical scale tokens. `canonical` entries always apply (any
+# prompt language). Per-language sections add localized yes/no + agree words; fill the
+# exact option words from the R9 translated questionnaire. Entries marked VERIFY are
+# best-effort and must be confirmed before relying on free-text parsing for that language.
+
+canonical:
+  "yes": "yes"
+  "y": "yes"
+  "no": "no"
+  "n": "no"
+  "agree": agree
+  "strongly agree": strongly_agree
+  "disagree": disagree
+  "strongly disagree": strongly_disagree
+  "neither": neither
+  "neutral": neither
+  "approve": approve
+  "strongly approve": strongly_approve
+  "disapprove": disapprove
+  "strongly disapprove": strongly_disapprove
+
+by_language:
+  afr:   # Afrikaans
+    "ja": "yes"
+    "nee": "no"
+    "stem saam": agree
+    "stem nie saam": disagree
+    "verskil": disagree
+  zul:   # isiZulu — VERIFY
+    "yebo": "yes"
+    "cha": "no"
+    "ngiyavuma": agree
+    "angivumi": disagree
+  xho:   # isiXhosa — VERIFY
+    "ewe": "yes"
+    "hayi": "no"
+    "ndiyavuma": agree
+    "andivumi": disagree
+  ssw:   # siSwati — VERIFY
+    "yebo": "yes"
+    "cha": "no"
+  nbl:   # isiNdebele — VERIFY
+    "iye": "yes"
+    "awa": "no"
+  # sot, tsn, nso, tso, ven: fill yes/no + agree words from the translated questionnaire.

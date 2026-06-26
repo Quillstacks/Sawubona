@@ -1,0 +1,4 @@
+# English = anchor/canonical language. Text is taken from items_political.yaml directly,
+# so this file is intentionally a no-op (kept for symmetry and as the template instance).
+lang: eng
+items: {}

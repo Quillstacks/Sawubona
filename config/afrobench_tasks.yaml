@@ -1,0 +1,43 @@
+# Which lm-evaluation-harness tasks score which language's capability, and how to
+# normalise each task's metric to [0, 1]. Used by src/decol/capability/afrobench.py.
+#
+# VERIFY the exact task names against your installed AfroBench / IrokoBench harness
+# (`lm_eval --tasks list | grep -E 'afrimmlu|afrixnli|afrimgsm'`). IrokoBench reliably
+# covers isiZulu (zul), isiXhosa (xho), Sesotho (sot); AfroBench's wider suite is expected
+# to cover the other Afrobarometer survey languages — confirm and adjust. Languages absent
+# here (Tshivenda ven, isiNdebele nbl) are handled by the extension (capability/extend.py).
+#
+# Per task:
+#   task            lm-eval task name
+#   metric          result key to read (e.g. acc, exact_match)
+#   random_baseline chance level for accuracy tasks (used for chance-correction); 0 for
+#                   generation/math
+#   n_classes       optional, documentation only
+
+languages:
+  zul:
+    - { task: afrimmlu_direct_zul, metric: acc, random_baseline: 0.25, n_classes: 4 }
+    - { task: afrixnli_en_direct_zul, metric: acc, random_baseline: 0.333, n_classes: 3 }
+    - { task: afrimgsm_direct_zul, metric: exact_match, random_baseline: 0.0 }
+  xho:
+    - { task: afrimmlu_direct_xho, metric: acc, random_baseline: 0.25, n_classes: 4 }
+    - { task: afrixnli_en_direct_xho, metric: acc, random_baseline: 0.333, n_classes: 3 }
+    - { task: afrimgsm_direct_xho, metric: exact_match, random_baseline: 0.0 }
+  sot:
+    - { task: afrimmlu_direct_sot, metric: acc, random_baseline: 0.25, n_classes: 4 }
+    - { task: afrixnli_en_direct_sot, metric: acc, random_baseline: 0.333, n_classes: 3 }
+    - { task: afrimgsm_direct_sot, metric: exact_match, random_baseline: 0.0 }
+  # --- VERIFY AfroBench coverage / exact task names for the remaining survey languages ---
+  afr:
+    - { task: afrimmlu_direct_afr, metric: acc, random_baseline: 0.25, n_classes: 4 }
+  nso:
+    - { task: afrimmlu_direct_nso, metric: acc, random_baseline: 0.25, n_classes: 4 }
+  tsn:
+    - { task: afrimmlu_direct_tsn, metric: acc, random_baseline: 0.25, n_classes: 4 }
+  tso:
+    - { task: afrimmlu_direct_tso, metric: acc, random_baseline: 0.25, n_classes: 4 }
+  ssw:
+    - { task: afrimmlu_direct_ssw, metric: acc, random_baseline: 0.25, n_classes: 4 }
+  eng:
+    - { task: afrimmlu_direct_eng, metric: acc, random_baseline: 0.25, n_classes: 4 }
+    - { task: afrixnli_en_direct_eng, metric: acc, random_baseline: 0.333, n_classes: 3 }

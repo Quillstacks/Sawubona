@@ -1,0 +1,87 @@
+# South Africa's official written languages (11).
+# `home_share`   = approximate first-language share, Census 2022 (for weighting / display).
+# `baseline`     = source of the human attitude baseline: afrobarometer | sasas | none
+# `ab_lang_code` = numeric value of the Afrobarometer Q102 "Language of interview" variable
+#                  (from AB_R9_MergeCodebook.pdf). Used to group respondents by the language
+#                  they were interviewed in. null = not a SA R9 survey language.
+# `afrobench`    = whether AfroBench has native coverage; else the capability extension.
+
+languages:
+  - code: zul
+    name: isiZulu
+    native: isiZulu
+    home_share: 0.244
+    baseline: afrobarometer
+    ab_lang_code: 706          # Zulu
+    afrobench: true
+  - code: xho
+    name: isiXhosa
+    native: isiXhosa
+    home_share: 0.163
+    baseline: afrobarometer
+    ab_lang_code: 701          # Xhosa
+    afrobench: true
+  - code: afr
+    name: Afrikaans
+    native: Afrikaans
+    home_share: 0.106
+    baseline: afrobarometer
+    ab_lang_code: 700          # Afrikaans
+    afrobench: true
+  - code: nso
+    name: Sepedi
+    native: Sepedi (Sesotho sa Leboa)
+    home_share: 0.100
+    baseline: afrobarometer
+    ab_lang_code: 702          # Pedi
+    afrobench: true
+  - code: tsn
+    name: Setswana
+    native: Setswana
+    home_share: 0.080
+    baseline: afrobarometer
+    ab_lang_code: 704          # Tswana
+    afrobench: true
+  - code: eng
+    name: English
+    native: English
+    home_share: 0.087
+    baseline: afrobarometer
+    ab_lang_code: 1            # English
+    afrobench: true
+    anchor: true               # English is the reference / anchor language
+  - code: sot
+    name: Sesotho
+    native: Sesotho
+    home_share: 0.079
+    baseline: afrobarometer
+    ab_lang_code: 703          # Sotho
+    afrobench: true
+  - code: tso
+    name: Xitsonga
+    native: Xitsonga
+    home_share: 0.045
+    baseline: afrobarometer
+    ab_lang_code: 542          # Changana/Tsonga — VERIFY this code appears for SA in the .sav
+    afrobench: true
+  - code: ssw
+    name: siSwati
+    native: siSwati
+    home_share: 0.029
+    baseline: afrobarometer
+    ab_lang_code: 1620         # Siswati
+    afrobench: true
+  - code: ven
+    name: Tshivenda
+    native: Tshivenda
+    home_share: 0.025
+    baseline: afrobarometer    # 705=Venda is a valid Q102 code; confirm SA used it in the
+    ab_lang_code: 705          #   .sav. If not present, falls back to SASAS or a gap.
+    afrobench: false           # under-served -> capability extension
+  - code: nbl
+    name: isiNdebele
+    native: isiNdebele
+    home_share: 0.016
+    baseline: none             # not a SA R9 interview language -> no human baseline (gap)
+    ab_lang_code: null
+    afrobench: false           # under-served -> capability extension
